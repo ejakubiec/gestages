@@ -11,7 +11,7 @@
 <div th:if="${message}">
     <h2 th:text="${message}"/>
 </div>
-<a th:href="@{'/populate'}">Charger les infos dans la BDD + retour à l'index<br />Veuillez patienter durant l'import<br />Cela peut prendre plusieurs minutes ...</a>
+<a class="btn btn-md btn-primary mb-3" th:href="@{'/populate'}">Charger les infos dans la BDD + retour à l'index<br />Veuillez patienter durant l'import<br />Cela peut prendre plusieurs minutes ...</a>
 <div th:replace="fragments/footer :: footer"/>
 </body>
 </html>

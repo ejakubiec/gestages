@@ -22,6 +22,10 @@
     <p>Code : <input type="text" th:field="*{code}"  /></p>
     <p>Libelle : <input type="text" th:field="*{libelle}" /></p>
     <p><input type="submit" value="Valider"/> <input type="reset" value="Reset" /></p>
+    <input
+            type="hidden"
+            th:name="${_csrf.parameterName}"
+            th:value="${_csrf.token}" />
 </form>
 </div>
 <div th:replace="fragments/footer :: footer"/>

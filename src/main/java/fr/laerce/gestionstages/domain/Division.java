@@ -23,7 +23,7 @@ public class Division implements Cloneable{
     private String code;
     @Column
     private String libelle;
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     private Niveau niveau;
     @ManyToMany(mappedBy = "divisions")
     private Set<Professeur> professeurs;

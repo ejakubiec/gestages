@@ -25,4 +25,6 @@ public interface ProfesseurRepository extends JpaRepository<Professeur, Long> {
 
     @Query("select d.niveau from Professeur p join p.divisions d where p.codeSynchro = :codeSynchro")
     List<Niveau> findNiveauxForProfesseur(@Param("codeSynchro") String codeSynchro);
+
+    public Professeur findByLogin(String login);
 }

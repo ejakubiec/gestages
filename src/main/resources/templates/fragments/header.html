@@ -49,17 +49,17 @@
                 </div>
             </div>
             <div sec:authorize="isAuthenticated()" class="text-center">
-                Utilisateur : <span sec:authentication="name">nom utilisateur</span>
+                Utilisateur : <span sec:authentication="name">nom utilisateur</span><span sec:authentication="authorities">Autotisations</span>
             </div>
         </header>
 
         <div class="nav-scroller py-1 mb-2">
             <nav class="nav d-flex justify-content-between">
-                <a class="p-2 text-dark" th:href="@{/individu/liste}" sec:authorize="hasRole('USER')">Individu</a>
-                <a class="p-2 text-dark" th:href="@{/discipline/liste}" sec:authorize="hasRole('USER')">Discipline</a>
-                <a class="p-2 text-dark" th:href="@{/division/liste}" sec:authorize="hasRole('USER')">Division</a>
-                <a class="p-2 text-dark" th:href="@{/niveau/liste}" sec:authorize="hasRole('USER')">Niveau</a>
-                <a class="p-2 text-dark" th:href="@{/upload}" sec:authorize="hasRole('ADMIN')">Upload</a>
+                <a class="p-2 text-dark" th:href="@{/individu/liste}" sec:authorize="hasAnyAuthority('USER','ADMIN')">Individu</a>
+                <a class="p-2 text-dark" th:href="@{/discipline/liste}" sec:authorize="hasAnyAuthority('USER','ADMIN')">Discipline</a>
+                <a class="p-2 text-dark" th:href="@{/division/liste}" sec:authorize="hasAnyAuthority('USER','ADMIN')">Division</a>
+                <a class="p-2 text-dark" th:href="@{/niveau/liste}" sec:authorize="hasAnyAuthority('USER','ADMIN')">Niveau</a>
+                <a class="p-2 text-dark" th:href="@{/upload}" sec:authorize="hasAuthority('ADMIN')">Upload</a>
             </nav>
         </div>
         <!-- Fin header -->

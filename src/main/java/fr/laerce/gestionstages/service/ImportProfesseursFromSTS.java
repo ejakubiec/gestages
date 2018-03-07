@@ -159,13 +159,13 @@ public class ImportProfesseursFromSTS {
               // update ? pb de classes wrappers... il faut demander
               // explicitement les instances aux dao (afin d'éviter une second insertion
               // des objets de la collection ... voir si pas une autre solution ?)
-              for (Division division : individuImported.getDivisions()){
-                division = repoDivision.findByCode(division.getCode());
-                individuManaged.addDivision(division);
+              for (Division division : individuImported.getDivisions()) {
+                  division = repoDivision.findByCode(division.getCode());
+                  individuManaged.addDivision(division);
               }
               for (Discipline discipline : individuImported.getDisciplines()) {
                 discipline = repoDiscipline.findByCode(discipline.getCode());
-                individuManaged.addDiscipline(discipline);
+                    individuManaged.addDiscipline(discipline);
               }
               // et plus...
               repoProfesseur.save(individuManaged);

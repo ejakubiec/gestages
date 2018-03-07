@@ -11,6 +11,10 @@
 
     <div class="starter-template">
         <h1 class="titlebody">index</h1>
+        <!-- Accès non autorisé -->
+        <div th:if="${error} == 'access'" class="text-center">
+            <span class="text-danger">You don't have access to this page</span>
+        </div>
     </div>
 <!--
     <div id="centre" class="container blanc">

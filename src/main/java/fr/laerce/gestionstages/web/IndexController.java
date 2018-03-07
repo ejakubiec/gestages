@@ -8,6 +8,7 @@ import fr.laerce.gestionstages.service.ImportSTSException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.regex.Pattern.matches;
 
 
 @Controller
@@ -38,6 +41,21 @@ public class IndexController {
     public String login() {
         return "login";
     }
+
+    // TODO login-error
+    @GetMapping("/login-error")
+    public String loginerror(Model model) {
+        model.addAttribute("error","login");
+        return "login";
+    }
+
+    // TODO accessDenied
+    @GetMapping("/accessDenied")
+    public String accessDenied(Model model) {
+        model.addAttribute("error","access");
+        return "index";
+    }
+
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
@@ -84,7 +102,10 @@ public class IndexController {
     // FIN TODO
 
 
-
+    @GetMapping("/403")
+    public String error403() {
+        return "/error/403";
+    }
 
     /** un dropdown qui fonctionne avec BT-beta et CDN qui vont bien
      *

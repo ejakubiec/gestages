@@ -17,7 +17,7 @@
         <th>code</th>
         <th>libelle</th>
         <th>niveau</th>
-        <th colspan="2" sec:authorize="hasRole('ADMIN')">Action</th>
+        <th colspan="2" sec:authorize="hasAuthority('ADMIN')">Action</th>
     </tr>
     <tr th:each="d : ${divisions}" class="text-center">
         <td th:text="${d.id}">id</td>
@@ -37,10 +37,10 @@
         </td>
         -->
 
-        <td sec:authorize="hasRole('ADMIN')">
+        <td sec:authorize="hasAuthority('ADMIN')">
             <a th:href="@{'/division/modif/' + ${d.id}}" class="btn btn-sm btn-outline-warning text-center">modify</a>
         </td>
-        <td sec:authorize="hasRole('ADMIN')">
+        <td sec:authorize="hasAuthority('ADMIN')">
             <a th:href="@{'/division/delete/' + ${d.id}}" class="btn btn-sm btn-outline-danger text-center">delete</a>
         </td>
 
@@ -51,7 +51,7 @@
         <p><input type="submit" value="Ajouter une division" /></p>
     </form>
 -->
-<div class="text-center pb-3" sec:authorize="hasRole('ADMIN')">
+<div class="text-center pb-3" sec:authorize="hasAuthority('ADMIN')">
 <a th:href="@{'/division/form'}" class="btn btn-sm btn-outline-success">Ajouter une division</a>
 </div>
 </div>

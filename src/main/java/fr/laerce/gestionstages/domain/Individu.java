@@ -1,10 +1,7 @@
 package fr.laerce.gestionstages.domain;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Projet pfmp-base
@@ -45,6 +42,13 @@ public class Individu implements Cloneable {
 
     @Column
     private String mdpOrigine;
+
+    /**
+     * Les rôles de l'utiilisateur éventuellement séparés par une
+     * virgule
+     */
+    @Column
+    private String roles;
 
     public Individu() {
     }
@@ -138,21 +142,37 @@ public class Individu implements Cloneable {
         this.mdpOrigine = mdpOrigine;
     }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Individu individu = (Individu) o;
-    return Objects.equals(codeSynchro, individu.codeSynchro);
-  }
+    public String getRoles() {
+        return roles;
+    }
 
-  @Override
-  public int hashCode() {
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
 
-    return Objects.hash(codeSynchro);
-  }
+    public boolean isAdmin(){
+        return getRoles().contains("ADMIN");
+    }
 
-  @Override
+    public boolean isUser(){
+        return getRoles().contains("USER");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Individu individu = (Individu) o;
+        return Objects.equals(codeSynchro, individu.codeSynchro);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(codeSynchro);
+    }
+
+    @Override
     public String toString() {
         return "Individu{" +
                 "id=" + id +

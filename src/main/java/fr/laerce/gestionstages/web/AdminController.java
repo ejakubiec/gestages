@@ -5,7 +5,10 @@ import fr.laerce.gestionstages.dao.*;
 import fr.laerce.gestionstages.domain.*;
 import fr.laerce.gestionstages.service.ImportProfesseursFromSTS;
 import fr.laerce.gestionstages.service.ImportSTSException;
+import fr.laerce.gestionstages.service.LoginManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +47,20 @@ public class AdminController {
     @Autowired
     private ImportProfesseursFromSTS importProfesseursFromSTS;
 
+    @Autowired
+    private LoginManager loginmanager;
+
+    @Value("${gstages.import}")
+    private String stsFileName;
+
+    @Value("${gstages.upload.dir}")
+    private String uploadFolder;
+    /*@Value("${gstages.import}")
+    private String stsFileName;
+
+    @Value("${gstages.upload.dir}")
+    private String uploadFolder;*/
+
     @GetMapping("/populate")
     public String populate(Model model) {
         String errorServiceImport = "";
@@ -51,9 +68,9 @@ public class AdminController {
         try {
             // changer le lien avec le fichier dans le docs
             //this.importProfesseursFromSTS.parseAndCreateUpdateIntoDatabase("J:/CDI/JAVAprojets/gestionStages/src/main/docs/sts_emp_0940321S_2017(clean).xml");
-            this.importProfesseursFromSTS.parseAndCreateUpdateIntoDatabase("J:/CDI/JAVAprojets/gestionStagesV2Layout/src/main/docs/sts_emp.xml");
+            this.importProfesseursFromSTS.parseAndCreateUpdateIntoDatabase(stsFileName);
+            System.out.println("import terminé");
             //this.importProfesseursFromSTS.parseAndCreateUpdateIntoDatabase("F:/CDI/JAVAprojets/gestionStagesV2Layout/src/main/docs/sts_emp.xml");
-
         } catch (ImportSTSException e) {
             errorServiceImport = "Erreur traitement XML : " + e.getMessage();
         } catch (Exception e) {
@@ -62,6 +79,12 @@ public class AdminController {
 
         if (!errorServiceImport.isEmpty()) {
             model.addAttribute("message", errorServiceImport);
+        }
+
+        for (Professeur professeur : repoProfesseur.findAll()
+                ) {
+            System.out.println("LOGIN : "+professeur);
+            loginmanager.createLoginForIndividu(professeur.getId());
         }
 
         model.addAttribute("niveaux", importProfesseursFromSTS.getDicoNiveaux().size());
@@ -78,7 +101,7 @@ public class AdminController {
 
     // GESTION DE L'UPLOAD DU FICHIER
     //Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "J:/CDI/JAVAprojets/gestionStagesV2Layout/src/main/docs/";
+    //private static String UPLOADED_FOLDER = "J:/CDI/JAVAprojets/gestionStagesV2Layout/src/main/docs/";
     //private static String UPLOADED_FOLDER = "F:/CDI/JAVAprojets/gestionStagesV2Layout/src/main/docs/";
 
     @PostMapping("/upload") // //new annotation since 4.3
@@ -95,7 +118,7 @@ public class AdminController {
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
             //Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-            Path path = Paths.get(UPLOADED_FOLDER + "sts_emp.xml");
+            Path path = Paths.get(uploadFolder + "sts_emp.xml");
             //System.out.println(path);
             Files.write(path, bytes);
 
@@ -153,5 +176,74 @@ public class AdminController {
         model.addAttribute("individu", p1);
         return "testcheck";
     }
+
+    /*public String generateLogin(Professeur professeur){
+        String lognom = "";
+        if (professeur.getNom().length() >= 7) {
+            lognom = professeur.getNom().substring(0, 7);
+        } else {
+            lognom = professeur.getNom().substring(0, professeur.getNom().length());
+        }
+        String login = professeur.getPrenom().substring(0, 1) + lognom;
+        login = login.toLowerCase();
+        login = login.replace(" ", "");
+        login = login.replace("'", "");
+        String nb = "1";
+        String newlogin = login;
+        while (repoProfesseur.findByLogin(newlogin) != null) {
+            newlogin = login + nb;
+            int nextnb = Integer.parseInt(nb) + 1;
+            nb = "" + nextnb;
+        }
+        return newlogin;
+    }
+
+    public String generateMdpOrigine(){
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String voyelle = "aeiouy";
+        String consonne = "zrtpqsdfghjklmwxcvbn";
+        String nombre = "0123456789";
+
+        int randomAlpha = (int) (Math.random() * (26));
+        String first = "" + alphabet.charAt(randomAlpha);
+        //System.out.println(first);
+        String mdp = first.toUpperCase();
+        if (voyelle.contains(first)) {
+            //System.out.println("voyelle");
+            boolean voy = false;
+            for (int i = 2; i <= 8; i++) {
+                int randomVoy = (int) (Math.random() * (6));
+                int randomCons = (int) (Math.random() * (20));
+                if (!voy) {
+                    mdp += consonne.charAt(randomCons);
+                    voy = true;
+                } else {
+                    mdp += voyelle.charAt(randomVoy);
+                    voy = false;
+                }
+            }
+        }
+        if (consonne.contains(first)) {
+            //System.out.println("consonne");
+            boolean cons = false;
+            for (int i = 2; i <= 8; i++) {
+                int randomVoy = (int) (Math.random() * (6));
+                int randomCons = (int) (Math.random() * (20));
+                if (!cons) {
+                    mdp += voyelle.charAt(randomVoy);
+                    cons = true;
+                } else {
+                    mdp += consonne.charAt(randomCons);
+                    cons = false;
+                }
+            }
+        }
+
+        for (int i = 1; i <= 4; i++) {
+            int randomNb = (int) (Math.random() * (10));
+            mdp += nombre.charAt(randomNb);
+        }
+        return mdp;
+    }*/
 
 }

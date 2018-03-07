@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GestionstagesApplication implements ApplicationRunner {
+public class GestionstagesApplication  {
   @Autowired
   DisciplineRepository disciplineRepository;
 
@@ -19,9 +19,4 @@ public class GestionstagesApplication implements ApplicationRunner {
 
   }
 
-  @Override
-  public void run(ApplicationArguments args) throws Exception {
-     ExperienceXml run = new ExperienceXml() ;
-     run.run(disciplineRepository);
-  }
 }
